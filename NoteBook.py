@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import tushare as ts
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 #利用TuShare获取数据
 g000538 = ts.get_hist_data('000538')
@@ -87,3 +88,5 @@ pd.read_csv('ch06/csv_mindex.csv',index_col=['key1','key2'])
          c         13      14
          d         15      16
 
+#用to_csv保存为csv文件
+g1.to_csv('ch06/temp1.csv')
