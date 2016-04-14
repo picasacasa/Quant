@@ -1,8 +1,7 @@
 import tushare as ts
 import numpy as np
-import matplotlib.plot as plt
 import matplotlib as plt
-%hist
+
 gp = ts.get_hist_data('150131')
 gp = gp.sort()
 gp.head
@@ -141,7 +140,7 @@ import datetime
 datetime.date,today()
 datetime.date.today()
 datetime.date.today()-gp2[0]
-gp2[0] = gp2[0].toordinal()
+gp2[0] = gp2[0].toordinal() #取日期的值
 gp2
 candlestick_ohlc(ax1, gp2, width=1, colorup = 'r', colordown='g')
 gp2[0]
@@ -193,3 +192,83 @@ candlestick_ohlc(ax, l1, width=0.6)
 plt.show()
 %hist
 %history
+
+
+
+
+import tushare as ts
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import datetime
+from dateutil.parser import parse
+
+
+gp1 = ts.get_hist_data('150131')
+gp1.insert(0, 'date', gp1.index)
+gp2 = gp1.T[:5].T.sort()
+
+
+#######################################################
+parse(gp2.iloc[0].date)
+parse(gp2.iloc[0].date).date()
+parse(gp2.iloc[0].date).date().toordinal()
+float(parse(gp2.iloc[0].date).date().toordinal())
+#######################################################
+for i in range(0,len(gp2.index)):
+    gp2.iloc[i].date = float(parse(gp2.iloc[i].date).date().toordinal())
+    
+list1 = []
+for i in range(0,len(gp2.index)):
+    list1.append(tuple(gp2.iloc[i]))
+    
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter, WeekdayLocator,\
+    DayLocator, MONDAY
+from matplotlib.finance import quotes_historical_yahoo_ohlc, candlestick_ohlc
+    
+    
+fig = plt.figure()
+ax1=fig.add_subplot(1,1,1)
+candlestick_ohlc(ax1, list1, width=1, colorup = 'r', colordown='g')
+
+fig = plt.figure()
+ax1 = list(gp2.index)
+candlestick_ohlc(ax1, list1, width=1, colorup = 'r', colordown='g')
+
+fig = plt.figure()
+candlestick_ohlc(gp2.index, list1, width=1, colorup = 'r', colordown='g')
+
+#!/usr/bin/env python
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter, WeekdayLocator,\
+    DayLocator, MONDAY
+from matplotlib.finance import quotes_historical_yahoo_ohlc, candlestick_ohlc
+
+mondays = WeekdayLocator(MONDAY)        # major ticks on the mondays
+alldays = DayLocator()              # minor ticks on the days
+weekFormatter = DateFormatter('%b %d')  # e.g., Jan 12
+dayFormatter = DateFormatter('%d')      # e.g., 12
+
+quotes = list1
+if len(quotes) == 0:
+    raise SystemExit
+
+fig, ax = plt.subplots()
+fig.subplots_adjust(bottom=0.2)
+ax.xaxis.set_major_locator(mondays)
+ax.xaxis.set_minor_locator(alldays)
+ax.xaxis.set_major_formatter(weekFormatter)
+#ax.xaxis.set_minor_formatter(dayFormatter)
+
+#plot_day_summary(ax, quotes, ticksize=3)
+candlestick_ohlc(ax, list1[-100:], width=0.6, colorup = 'r', colordown='g')
+
+ax.xaxis_date()
+ax.autoscale_view()
+plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
+
+plt.show()
+
+###Question 没有数据的周六日在图像上是有显示的
+http://www.financecomputing.net/wordpress/?p=1093
