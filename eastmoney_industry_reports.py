@@ -38,7 +38,7 @@ def get_eastmoney_industry_reports(pages):
         print('第' + str(i) + '页提取成功')
         soup0 = BeautifulSoup(html_doc, "lxml")
         soup1 = soup0.text[3:][:-3].split('","')
-        for j in range(0, len(soup1)-1):
+        for j in range(0, len(soup1)): #此处不能用len(soup1)-1,会缺少数据
             soup2.append(soup1[j].replace('&sbquo;', '，').replace('&quot;', '\"').split(','))
     
     dataf = pd.DataFrame(soup2,)
