@@ -44,3 +44,13 @@ def get_eastmoney_industry_reports(pages):
     dataf = pd.DataFrame(soup2,)
     # 返回DataFrame
     return dataf
+
+def get_eastmoney_report(urls):
+    for i in range(0, len(urls)):
+        temp_url = 'http://data.eastmoney.com/report/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '/hy,' + spyl.loc[spyl.index[i]][2] + '.html'
+        temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]][4] + '_' + spyl.loc[spyl.index[i]][9] + '.pdf'
+        urllib.request.urlretrieve(temp_url, temp_name)
+    print('Download Successfully')
+    return
+
+    
