@@ -46,6 +46,8 @@ def get_eastmoney_industry_reports(pages):
     return dataf
 
 def get_eastmoney_report(urls):
+    from dateutil.parser import parse
+    # 此处待添加验证 urls 是否为 DataFrame
     for i in range(0, len(urls)):
         temp_url = 'http://data.eastmoney.com/report/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '/hy,' + spyl.loc[spyl.index[i]][2] + '.html'
         temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]][4] + '_' + spyl.loc[spyl.index[i]][9] + '.pdf'
