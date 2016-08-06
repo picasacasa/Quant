@@ -41,7 +41,8 @@ def get_eastmoney_industry_reports(pages):
         for j in range(0, len(soup1)): #此处不能用len(soup1)-1,会缺少数据
             soup2.append(soup1[j].replace('&sbquo;', '，').replace('&quot;', '\"').split(','))
     
-    dataf = pd.DataFrame(soup2,)
+    dataf = pd.DataFrame(soup2, columns = ['评级变动', '报告日期', '编号', '机构代码', '机构名称', '机构影响力', '行业代码', '评级类别', '投资评级', '标题', '行业名称', '涨跌幅'])
+    dataf.index = dataf['编号']
     # 返回DataFrame
     return dataf
 
@@ -53,7 +54,7 @@ def get_eastmoney_report(urls):
         html_doc = urllib.request.urlopen(temp_url).read()
         soup = BeautifulSoup(html_doc, "lxml")
         file_url = soup.find_all(text = '查看PDF原文')[0].parent.get('href')
-        temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]][4] + '_' + spyl.loc[spyl.index[i]][9] + '.pdf'
+        temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]]['报告日期']).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]]['机构名称'] + '_' + spyl.loc[spyl.index[i]]['标题'] + '.pdf'
         urllib.request.urlretrieve(file_url, temp_name)
     print('Download ' + str(len(urls)) + ' files '+ 'Successfully !')
     return
