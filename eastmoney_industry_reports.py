@@ -50,11 +50,11 @@ def get_eastmoney_report(urls):
     from dateutil.parser import parse
     # 此处待添加验证 urls 是否为 DataFrame
     for i in range(0, len(urls)):
-        temp_url = 'http://data.eastmoney.com/report/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '/hy,' + spyl.loc[spyl.index[i]][2] + '.html'
+        temp_url = 'http://data.eastmoney.com/report/' + parse(urls.loc[urls.index[i]]['报告日期']]).strftime('%Y'+'%m'+'%d') + '/hy,' + urls.loc[urls.index[i]]['编号'] + '.html'
         html_doc = urllib.request.urlopen(temp_url).read()
         soup = BeautifulSoup(html_doc, "lxml")
         file_url = soup.find_all(text = '查看PDF原文')[0].parent.get('href')
-        temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]]['报告日期']).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]]['机构名称'] + '_' + spyl.loc[spyl.index[i]]['标题'] + '.pdf'
+        temp_name = '/home/wangshi/script/' + parse(urls.loc[urls.index[i]]['报告日期']).strftime('%Y'+'%m'+'%d') + '_' + urls.loc[urls.index[i]]['机构名称'] + '_' + urls.loc[urls.index[i]]['标题'] + '.pdf'
         urllib.request.urlretrieve(file_url, temp_name)
     print('Download ' + str(len(urls)) + ' files '+ 'Successfully !')
     return
