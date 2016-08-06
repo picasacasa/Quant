@@ -55,7 +55,7 @@ def get_eastmoney_report(urls):
         file_url = soup.find_all(text = '查看PDF原文')[0].parent.get('href')
         temp_name = '/home/wangshi/script/' + parse(spyl.loc[spyl.index[i]][1]).strftime('%Y'+'%m'+'%d') + '_' + spyl.loc[spyl.index[i]][4] + '_' + spyl.loc[spyl.index[i]][9] + '.pdf'
         urllib.request.urlretrieve(file_url, temp_name)
-    print('Download Successfully')
+    print('Download ' + str(len(urls)) + ' files '+ 'Successfully !')
     return
 
     
