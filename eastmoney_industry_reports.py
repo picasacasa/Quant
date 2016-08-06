@@ -41,8 +41,10 @@ def get_eastmoney_industry_reports(pages):
         for j in range(0, len(soup1)): #此处不能用len(soup1)-1,会缺少数据
             soup2.append(soup1[j].replace('&sbquo;', '，').replace('&quot;', '\"').split(','))
     
-    dataf = pd.DataFrame(soup2, columns = ['评级变动', '报告日期', '编号', '机构代码', '机构名称', '机构影响力', '行业代码', '评级类别', '投资评级', '标题', '行业名称', '涨跌幅'])
+    dataf = pd.DataFrame(soup3, columns = ['评级变动', '报告日期', '编号', '机构代码', '机构名称', '机构影响力', '行业代码', '评级类别', '投资评级', '标题', '行业名称', '涨跌幅'])
     dataf.index = dataf['编号']
+    dataf.index.name = 'indexs'
+    # dataf.to_csv('/home/wangshi/script/dfcft_hy')
     # 返回DataFrame
     return dataf
 
