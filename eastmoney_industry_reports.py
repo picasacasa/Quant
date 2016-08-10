@@ -46,8 +46,9 @@ def get_eastmoney_report(urls):
     print('Download ' + str(len(urls)) + ' files '+ 'Successfully !')
     return
 
+data_temp = get_eastmoney_industry_reports(page_number)
 
-dataf = pd.DataFrame(soup3, columns = ['评级变动', '报告日期', '编号', '机构代码', '机构名称', '机构影响力', '行业代码', '评级类别', '投资评级', '标题', '行业名称', '涨跌幅'])
+dataf = pd.DataFrame(data_temp, columns = ['评级变动', '报告日期', '编号', '机构代码', '机构名称', '机构影响力', '行业代码', '评级类别', '投资评级', '标题', '行业名称', '涨跌幅'])
 dataf.index = dataf['编号']
 dataf.index.name = 'indexs'
-dataf.to_csv('/home/wangshi/script/dfcft_hy')
+dataf.to_csv('/home/wangshi/reports/script/dfcft_hy')
