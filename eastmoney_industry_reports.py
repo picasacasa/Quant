@@ -103,5 +103,6 @@ get_eastmoney_report(food_beverage, '/home/wangshi/reports/food_beverage/')
 
 
 # 将新的文件存盘，并备份为含日期格式的文件
-data_all.to_csv('/home/wangshi/reports/dfcft_hy')
+# 将新的文件存盘，并备份为含日期格式的文件
+data_all.to_csv('/home/wangshi/reports/script/dfcft_hy')
 shutil.copyfile('/home/wangshi/reports/script/dfcft_hy', ('/home/wangshi/reports/script/dfcft_hy_' + str((datetime.now()).strftime('%Y%m%d'))))
