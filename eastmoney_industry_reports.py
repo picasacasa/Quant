@@ -51,8 +51,13 @@ def get_eastmoney_report(urls, paths):
         soup = BeautifulSoup(html_doc, "lxml")
         file_url = soup.find_all(text = '查看PDF原文')[0].parent.get('href')
         temp_name = paths + parse(urls.loc[urls.index[i]]['报告日期']).strftime('%Y'+'%m'+'%d') + '_' + urls.loc[urls.index[i]]['机构名称'] + '_' + urls.loc[urls.index[i]]['标题'] + '.pdf'
-        urllib.request.urlretrieve(file_url, temp_name)
-    print('Download ' + str(len(urls)) + ' files '+ 'Successfully !')
+        count_number = 0
+        if os.path.isfile(temp_name) == True:
+            pass
+        else:
+            urllib.request.urlretrieve(file_url, temp_name)
+            count_number += 1
+    print('Download ' + count_number + ' new files '+ 'Successfully !')
     return
 
 # DataFrame 的差
