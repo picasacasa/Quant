@@ -57,7 +57,7 @@ def get_eastmoney_report(urls, paths):
         else:
             urllib.request.urlretrieve(file_url, temp_name)
             count_number += 1
-    print('Download ' + count_number + ' new files '+ 'Successfully !')
+    print('Download ' + str(count_number) + '/' + str(len(urls)) + ' new files '+ 'Successfully !')
     return
 
 # DataFrame 的差
@@ -95,8 +95,11 @@ data_delta = df_diff(data_new, data_old)
 data_all = df_all(data_new, data_old)
 
 
-data_medical = data_delta[data_delta['行业代码'] == '465']
+data_medical = df_all(data_delta[data_delta['行业代码'] == '465'], data_delta[data_delta['行业代码'] == '727'])
 get_eastmoney_report(data_medical, '/home/wangshi/reports/medical/')
+
+food_beverage = df_all(data_delta[data_delta['行业代码'] == '438'],data_delta[data_delta['行业代码'] == '477'])
+get_eastmoney_report(food_beverage, '/home/wangshi/reports/food_beverage/')
 
 
 # 将新的文件存盘，并备份为含日期格式的文件
