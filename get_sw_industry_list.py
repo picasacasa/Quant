@@ -35,3 +35,7 @@ def get_sw_industry_list(industry_code):
     datatemp.index.name = 'code'
     
     return datatemp
+
+# 指数列表见 http://www.swsindex.com/idx0200.aspx?columnid=8838&type=Day
+# 801120 食品饮料
+# 801150 医药生物
