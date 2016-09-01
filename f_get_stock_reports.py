@@ -146,6 +146,8 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
     # import requests, urllib, os, shutil, json
     # import pandas as pd
     
+    # 总计输出备用
+    reports_not_exist_count = 'Reports_Not_Exist:' + '\n'
     
     # 第一层循环，遍历列表中每个股票代码，取得其报告页数
     for stock_code in list(DataFrame['证券代码']):
@@ -204,7 +206,9 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
             traceback.print_exc()
             print('Fail to get reports of ' + DataFrame['证券代码'].loc[stock_code] + '_' + DataFrame['证券名称'].loc[stock_code])
             
-
+    # 输出空值文件
+    print('\n' +reports_not_exist_count + '\n')
+    
     return
 
 
