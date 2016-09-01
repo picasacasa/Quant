@@ -15,6 +15,9 @@ import pandas as pd
 # 导入异常记录模块
 import traceback 
 
+# 总计输出备用
+reports_not_exist_count = 'Reports_Not_Exist:' + '\n'
+
 def get_sw_industry_list(industry_code): # 不用 list ，用 text 输入
     
     # 引入所需包
@@ -146,7 +149,7 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
     
     # 第一层循环，遍历列表中每个股票代码，取得其报告页数
     for stock_code in list(DataFrame['证券代码']):
-        
+           
         try:
             url_data_0 = 'http://datainterface.eastmoney.com//EM_DataCenter/js.aspx?type=SR&sty=GGSR&js=var%20PrnJnSby={%22data%22:[(x)],%22pages%22:%22(pc)%22,%22update%22:%22(ud)%22,%22count%22:%22(count)%22}&ps=25&p=1&code=' + stock_code
             html_doc_0 = urllib.request.urlopen(url_data_0).read()
@@ -157,7 +160,8 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
             
             # 向上取整取得报告页数
             if jsontext_0['data'] == '[{stats:false}]':
-                print(stock_code + '_' + DataFrame['证券名称'].loc[stock_code] + ' Reports Not Exist')
+                reports_not_exist_count += stock_code + '_' + DataFrame['证券名称'].loc[stock_code] + '\n'
+                # print(stock_code + '_' + DataFrame['证券名称'].loc[stock_code] + ' Reports Not Exist')
                 pass
                 
             else:
@@ -199,6 +203,7 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
         except:
             traceback.print_exc()
             print('Fail to get reports of ' + DataFrame['证券代码'].loc[stock_code] + '_' + DataFrame['证券名称'].loc[stock_code])
+            
 
     return
 
@@ -211,6 +216,11 @@ for i in industry_codes:
     temp_list = get_sw_industry_list(i)
     get_stock_report_list(temp_list)
 
+# 输出空值文件
+print('\n' +reports_not_exist_count + '\n')
+
+
 end_time = datetime.now()
+
 print('\n' + 'USED ' + str((end_time - start_time).seconds) + ' seconds!')
 print('\n' + str(datetime.now()))
