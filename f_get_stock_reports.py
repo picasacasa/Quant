@@ -1,7 +1,4 @@
-
 # coding: utf-8
-
-# In[1]:
 
 from datetime import datetime
 start_time = datetime.now()
@@ -13,11 +10,8 @@ from dateutil.parser import parse
 from bs4 import BeautifulSoup
 import requests, urllib, os, shutil, json
 import pandas as pd
-
+# 异常处理
 import traceback
-
-
-# In[2]:
 
 def get_sw_industry_list(industry_code): # 不用 list ，用 text 输入
     
@@ -41,7 +35,6 @@ def get_sw_industry_list(industry_code): # 不用 list ，用 text 输入
     list2 = []
     
     # 处理 th 即标题
-    
     for i in range(0, len(table1.find_all('th'))):
         list2.append(table1.find_all('th')[i].text)
         
@@ -80,8 +73,6 @@ def get_sw_industry_list(industry_code): # 不用 list ，用 text 输入
     return datatemp
 
 
-# In[3]:
-
 # DataFrame 的差
 def df_diff(df_a, df_b):
     df_a_b = df_a.ix[df_a.index.difference(df_b.index)]
@@ -93,8 +84,6 @@ def df_all(df_a, df_b):
     df_all = df_a_b.append(df_b)
     return df_all
 
-
-# In[40]:
 
 # 此处用 list 输入 codes，可试用 list + DataFrame 输入
 def get_eastmoney_stock_report(urls, paths, code, name):
@@ -110,12 +99,8 @@ def get_eastmoney_stock_report(urls, paths, code, name):
     # 此处待添加验证 urls 是否为 DataFrame
 
     for i in range(0, len(urls)):
-
-        
-
         try:
             temp_url_3 = 'http://data.eastmoney.com/report/' + parse(urls.loc[urls.index[i]]['datetime']).strftime('%Y'+'%m'+'%d') + '/' + urls.loc[urls.index[i]]['infoCode'] + '.html'
-            
             html_doc_3 = urllib.request.urlopen(temp_url_3).read()
             soup_3 = BeautifulSoup(html_doc_3, "lxml")
 
@@ -125,7 +110,6 @@ def get_eastmoney_stock_report(urls, paths, code, name):
             if os.path.isfile(temp_name_3) == True:
                 # print('File already exist! PASS!')
                 count_pass += 1
-                # pass
             else:
                 urllib.request.urlretrieve(file_url_3, temp_name_3)
                 count_download += 1
@@ -133,7 +117,6 @@ def get_eastmoney_stock_report(urls, paths, code, name):
         except:
             print('Fail to get the file of ' + code + '_' + name + ',' + 'Please download the file manually !' + '\n'  + temp_url_3)
             count_fail += 1
-            # pass
         
     if count_download + count_pass + count_fail == 0:
         pass
@@ -141,9 +124,6 @@ def get_eastmoney_stock_report(urls, paths, code, name):
         print(code + '_' + name + '：' + 'DOWN:' + str(count_download) + '_' + 'PASS:' + str(count_pass) + '_' + 'FAIL:' + str(count_fail))
     
     return
-
-
-# In[5]:
 
 # 通过输入股票代码列表下载股票报告清单到硬盘
 def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports_list/'):
@@ -205,7 +185,6 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
                 else:
                     data_delta = data_1
                
-            
                 get_eastmoney_stock_report(data_delta, DataFrame['文件夹'].loc[stock_code], DataFrame['证券代码'].loc[stock_code], DataFrame['证券名称'].loc[stock_code])
             
                 data_1.to_csv(path + stock_code)
@@ -216,23 +195,13 @@ def get_stock_report_list(DataFrame, path = '/home/wangshi/script/stocks_reports
             
     # 输出空值文件
     print(reports_not_exist_count + '\n')
-    
     return
 
-
-# In[6]:
-
 industry_codes = ['801120', '801150']
-
-
-# In[7]:
 
 for i in industry_codes:
     temp_list = get_sw_industry_list(i)
     get_stock_report_list(temp_list)
-
-
-# In[10]:
 
 end_time = datetime.now()
 
