@@ -5,18 +5,18 @@ from prettytable import PrettyTable
 一个测试与验证MACD在选股与判断大势方面作用的策略。
 '''
 def initialize(context):
-    g.buy_stock_count = 10  # 最大买入股票数
-    g.index2 = '000300.XSHG'
-    g.index8 = '399006.XSHE'
-    g.to_buy_2 = False
-    set_benchmark('000300.XSHG')
+    g.buy_stock_count = 10  #最大买入股票数
+    g.index2 = '000300.XSHG' #指数1，沪深300
+    g.index8 = '399006.XSHE' #指数2，创业板指
+    g.to_buy_2 = False # ？？？？？，不知所云
+    set_benchmark('000300.XSHG') #回测基准
     set_commission(PerTrade(buy_cost=0.0003, sell_cost=0.0013, min_cost=5)) # 设置手续费率 
-    set_option('use_real_price', True)
-
+    set_option('use_real_price', True) #真实价格成交
+    
 def handle_data(context, data):
-    if not [context.current_dt.hour,context.current_dt.minute] == [14,50]:
+    if not [context.current_dt.hour,context.current_dt.minute] == [14,50]: #设置交易时间，非14:50不运行
         return
-    op_buy_stocks = []
+    op_buy_stocks = [] #？买入股票池？
     # 20日涨幅
     gr_index2 = get_growth_rate(g.index2)
     gr_index8 = get_growth_rate(g.index8)
