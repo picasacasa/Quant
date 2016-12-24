@@ -1,6 +1,7 @@
 import talib
 from prettytable import PrettyTable 
 '''
+复制于joinquant，用于学习jq的语法，原文链接 https://www.joinquant.com/post/4231?tag=algorithm
 一个测试与验证MACD在选股与判断大势方面作用的策略。
 '''
 def initialize(context):
