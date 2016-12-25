@@ -4,7 +4,7 @@ from prettytable import PrettyTable
 复制于joinquant，用于学习jq的语法，原文链接 https://www.joinquant.com/post/4231?tag=algorithm
 一个测试与验证MACD在选股与判断大势方面作用的策略。
 '''
-def initialize(context):
+def initialize(context): # 最开始执行一次（只执行一次）
     g.buy_stock_count = 10  #最大买入股票数
     g.index2 = '000300.XSHG' #指数1，沪深300
     g.index8 = '399006.XSHE' #指数2，创业板指
