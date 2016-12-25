@@ -54,7 +54,7 @@ def handle_data(context, data):
         
         if position_count < g.buy_stock_count :
             # 选取股票，买入
-            buy_stocks = get_buy_stocks(context,g.buy_stock_count - position_count)
+            buy_stocks = get_buy_stocks(context,g.buy_stock_count - position_count) #可买股票 - 已持有股票 = buy_stocks
             if len(buy_stocks) == 0:
                 return
             buy_count = 0
@@ -89,7 +89,6 @@ def get_buy_stocks(context,count):
 
     q = query(valuation.code).filter(valuation.pe_ratio > 0,valuation.pe_ratio < max_pe).order_by(valuation.market_cap.asc()).limit(200) # pe 在区间 (0,200)，以市值排序，asc？？？
 
-
     df = get_fundamentals(q) #查询财务数据
     stock_list = list(df['code'])
     data = get_current_data() #获取当前单位时间（当天/当前分钟）的涨跌停价, 是否停牌，当天的开盘价等。
@@ -97,11 +96,11 @@ def get_buy_stocks(context,count):
 
     # 过滤停牌,ST，涨跌停，已持仓
     stock_list = [stock for stock in stock_list if
-                not data[stock].paused
-                and not data[stock].is_st
-                and prices[stock][-1] < data[stock].high_limit
-                and prices[stock][-1] > data[stock].low_limit
-                and not stock in context.portfolio.positions.keys()
+                not data[stock].paused # 停牌
+                and not data[stock].is_st # ST
+                and prices[stock][-1] < data[stock].high_limit # 涨停
+                and prices[stock][-1] > data[stock].low_limit # 跌停
+                and not stock in context.portfolio.positions.keys() # 未持股
                 ]
     result = []
     result2 = []
@@ -111,7 +110,7 @@ def get_buy_stocks(context,count):
             result.append(stock)
             log.info('%s 三日内金叉'%(show_stock(stock)))
             if len(result) >= count:
-                break
+                break # 已按市值排序 ？？？
         elif not can_sell(stock):
             result2.append(stock)
             
@@ -171,7 +170,7 @@ def can_sell(stock,day_count = 3):
 # 获取MACD数据，有增加当日数据
 def MACD(stock):
     prices = attribute_history(stock, 130, '1d', ('close'),fq='pre')['close'].values
-    # 增加当日数据去计算
+    # 增加当日数据去计算 #### 此处关键，prices 为历史信息，加上当日 cur_prices 信息纳入计算才是当日14:50时K线
     cur_prices = attribute_history(stock, 1, '1m', ('close'),fq='pre')['close'].values
     prices += cur_prices
     
