@@ -73,30 +73,26 @@ def handle_data(context, data):
     
 # 判断牛熊分界，当前价格处于250日均线之下时，返回True
 def bear_boundary(stock):
-    close_data = attribute_history(stock, 250, '1d', ['close'],fq='pre')
-    MA250 = close_data['close'].mean()
-    cur_price = get_close_price(stock,1,'1m')
+    close_data = attribute_history(stock, 250, '1d', ['close'],fq='pre') # 取一年收盘价
+    MA250 = close_data['close'].mean() #以年线作为牛熊分界
+    cur_price = get_close_price(stock,1,'1m') #现价
     print '判断是否是熊市 : cur_price: %f < MA250: %f ? %s'%(cur_price,MA250,cur_price < MA250)
-    return cur_price < MA250
+    return cur_price < MA250 #现价<年线，返回True，判断为熊市
     
 # 选股
 def get_buy_stocks(context,count):
     # 根据牛熊市调整不同的PE选股范围
-    bear = bear_boundary(g.index2)
-    max_pe = 200 if bear else 300
+    bear = bear_boundary(g.index2) # 熊市期间以沪深300选股
+    max_pe = 200 if bear else 300 # 最大 PE 在熊市时设定为 200,在牛市时为 300
 
-    q = query(valuation.code).filter(
-        valuation.pe_ratio > 0,
-        valuation.pe_ratio < max_pe
-    ).order_by(
-        valuation.market_cap.asc()
-    ).limit(200)
+    q = query(valuation.code).filter(valuation.pe_ratio > 0,valuation.pe_ratio < max_pe).order_by(valuation.market_cap.asc()).limit(200) # pe 在区间 (0,200)，以市值排序，asc？？？
 
 
-    df = get_fundamentals(q)
+    df = get_fundamentals(q) #查询财务数据
     stock_list = list(df['code'])
-    data = get_current_data()
-    prices = history(1, unit='1m', field='close', security_list=stock_list)
+    data = get_current_data() #获取当前单位时间（当天/当前分钟）的涨跌停价, 是否停牌，当天的开盘价等。
+    prices = history(1, unit='1m', field='close', security_list=stock_list) #获取历史数据
+
     # 过滤停牌,ST，涨跌停，已持仓
     stock_list = [stock for stock in stock_list if
                 not data[stock].paused
@@ -125,36 +121,6 @@ def get_buy_stocks(context,count):
         else:
             result += result2
     return result
-    
-    # # 先获取低位二次金叉的
-    # if len(result) < count:
-    #     for stock in stock_list:
-    #         if can_buy_prior(stock):
-    #             result.append(stock)
-    #             log.info('%s 低位二次金叉'%(show_stock(stock)))
-    #             if len(result) >= count:
-    #                 break
-    
-    # # 获取最近三天金叉的
-    # if len(result) < count:
-    #     # # 选股
-    #     for stock in stock_list:
-    #         if not stock in result and can_buy(stock,3):
-    #             result.append(stock)
-    #             log.info('%s 三日内金叉'%(show_stock(stock)))
-    #             if len(result) >= count:
-    #                 break
-                
-    # # 获取DIF > DEA 并且非卖条件的
-    # if len(result) < count:
-    #     for stock in stock_list :
-    #         if not stock in result and can_buy_poor(stock):
-    #             result.append(stock)
-    #             log.info('%s  DIF > DEA '%(show_stock(stock)))
-    #             if len(result) >= count:
-    #                 break
-    # print result
-    # return result
     
 '''----------------------------------MACD判断--------------------------'''
 # 判断股票是否在买点，看最近三天，是否形成金叉
