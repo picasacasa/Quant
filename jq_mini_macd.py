@@ -18,18 +18,20 @@ def handle_data(context, data):
         return
     op_buy_stocks = [] #？买入股票池？
     # 20日涨幅
-    gr_index2 = get_growth_rate(g.index2)
-    gr_index8 = get_growth_rate(g.index8)
-    old_to_buy_2 = g.to_buy_2
-    g.to_buy_2 = gr_index2 - gr_index8 > 0.08
+    gr_index2 = get_growth_rate(g.index2) #沪深300的20日涨幅
+    gr_index8 = get_growth_rate(g.index8) #创业板指的20日涨幅
+    old_to_buy_2 = g.to_buy_2 # = False ？？
+    g.to_buy_2 = gr_index2 - gr_index8 > 0.08 # g.to_buy_2 2>8 时为 True
     
-    if g.to_buy_2:
-        record(buy_type = 5)
-    else:
+    if g.to_buy_2: # 市场为 2 时
+        record(buy_type = 5) # 调用record函数来描画额外的曲线
+    else: # 市场为 8 时
         record(buy_type = -5)
     
     # 28转换则清仓重买
-    if old_to_buy_2 != g.to_buy_2:
+
+    # 如市场与以上判断不同，卖出全部股票？？
+    if old_to_buy_2 != g.to_buy_2: # old_to_buy_2 默认值为 False ，市场为 2 时 to_buy_2 为 True，市场为 8 时 to_buy_2 为 False，
         for stock in context.portfolio.positions.keys():
             order_target(stock, 0)
             log.info("卖出 %s",show_stock(stock))
@@ -44,7 +46,7 @@ def handle_data(context, data):
     else:
         # 卖出符合条件的股票
         for stock in context.portfolio.positions.keys():
-            if can_sell(stock):
+            if can_sell(stock): # 如果可卖
                 order_target(stock, 0)
                 log.info("卖出 %s",show_stock(stock))
                 
