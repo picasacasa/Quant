@@ -1202,10 +1202,8 @@ def is_3_black_crows(stock):
     if len(h_close) < 4 or len(h_open) < 4:
         return False
     
-    # 一阳三阴
-    if h_close[-4] > h_open[-4] \
-        and (h_close[-1] < h_open[-1] and h_close[-2]< h_open[-2] and h_close[-3] < h_open[-3]):
-        #and (h_close[-1] < h_close[-2] and h_close[-2] < h_close[-3]) \
+    # 一阳三阴 #-#-#- 作者此前格式仅考虑1
+    if h_close[-4] > h_open[-4] and (h_close[-1] < h_open[-1] and h_close[-2]< h_open[-2] and h_close[-3] < h_open[-3]) and (h_close[-1] < h_close[-2] and h_close[-2] < h_close[-3]):
         #and h_close[-1] / h_close[-4] - 1 < -0.045:
         return True
     return False
