@@ -44,7 +44,7 @@ def select_strategy():
         [True,'指数最高低价比值止损','Stop_loss_by_price',{
             'index':'000001.XSHG',                  # 使用的指数,默认 '000001.XSHG'
              'day_count':160,                       # 可选 取day_count天内的最高价，最低价。默认160
-             'multiple':2.2                         # 可选 最高价为最低价的multiple倍时，触 发清仓
+             'multiple':2.2                         # 可选 最高价为最低价的multiple倍时，触发清仓
             }],
         [True,'指数三乌鸦止损','Stop_loss_by_3_black_crows',{
             'index':'000001.XSHG',                  # 使用的指数,默认 '000001.XSHG'
@@ -57,7 +57,7 @@ def select_strategy():
                     'dst_minute_count_28index_drop': 120 # 符合条件连续多少分钟则清仓
                 }],
         [True,'调仓时间','Time_condition',{
-                'houre': 14,                    # 调仓时间,小时
+                'houre': 14,                    # 调仓时间，小时
                 'minute' : 50                   # 调仓时间，分钟
             }],
         [True,'28择时','Index28_condition',{    # 该调仓条件可能会产生清仓行为
