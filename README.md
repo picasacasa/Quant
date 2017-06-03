@@ -1,3 +1,3 @@
 # quant
-Quant Code
+Quant Codes
 
