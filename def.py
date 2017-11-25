@@ -33,3 +33,12 @@ def chinese_able_url(url):
     import  string
     url = quote(url, safe = string.printable)
     return url
+
+
+##### itchat #####
+
+# 以备注名获取可使用的用户名
+# get_UserName_from_RemarkName
+def get_UserName(databash,remarkname):
+    username = databash[databash['RemarkName']==remarkname]['UserName'][1]
+    return username
