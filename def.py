@@ -42,3 +42,16 @@ def chinese_able_url(url):
 def get_UserName(databash,remarkname):
     username = databash[databash['RemarkName']==remarkname]['UserName'][1]
     return username
+
+
+##### photo / picture #####
+# get Original DateTime from picture
+def get_exif_date(location):
+    import exifread
+    try:
+        f = open(location,'rb')
+        tabs = exifread.process_file(f)
+        f.close()
+        return tabs['EXIF DateTimeOriginal'].printable
+    except:
+        return 'EXIF_MESSAGE_ERROR'
